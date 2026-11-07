@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Impossible Elevator | Jasmine Mak, Interior Design Portfolio</title>
+<meta name="description" content="Interactive interior design portfolio of Jasmine Mak, Georgian College, graduating 2027.">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-view="home">
+<header class="nav">
+  <nav aria-label="Main">
+    <button data-nav="home">Home</button>
+    <button data-nav="elevator">Elevator</button>
+    <button data-nav="projects">All Projects</button>
+    <button data-nav="about">About</button>
+    <button data-nav="archive">Archive</button>
+    <button data-nav="contact">Contact</button>
+    <button id="musicBtn" class="music" aria-pressed="false">♪ Sound on</button>
+    <label class="skip"><input type="checkbox" id="skipAnim"> Skip animations</label>
+  </nav>
+</header>
+
+<main>
+  <!-- ARRIVE -->
+  <section id="home" class="scene on" aria-label="Arrival">
+    <div class="stage"><img src="assets/images/homepage-lobby.webp" alt="Luxury lobby with a bronze elevator" data-ph></div>
+    <div class="hero">
+      <h1 style="--i:0">THE IMPOSSIBLE ELEVATOR</h1>
+      <p class="name" style="--i:1">JASMINE MAK</p>
+      <p class="role" style="--i:2">Interior Design Portfolio</p>
+      <p class="intro" style="--i:3">Every space has a story. Every floor reveals a different way of thinking.</p>
+      <p class="support" style="--i:4">An exploration of spaces, experiences, and the ideas that shape them. Step inside and discover my approach to interior design.</p>
+      <button id="enter" class="btn" style="--i:5">ENTER THE ELEVATOR</button>
+      <p class="begin" style="--i:6">Your journey begins here.</p>
+    </div>
+  </section>
+
+  <!-- CHOOSE -->
+  <section id="elevator" class="scene" aria-label="Elevator">
+    <div class="stage" id="cab">
+      <img class="base" src="assets/images/elevator-interior.webp" alt="Inside the elevator, doors closed" data-ph>
+      <div class="opening"></div>
+      <div class="door l"></div><div class="door r"></div>
+      <div class="spill" aria-hidden="true"></div>
+    </div>
+    <div class="indicator" aria-live="polite"><span id="floorNum">L</span><small id="floorName">Lobby</small></div>
+    <div class="panel" role="group" aria-label="Floor selection"></div>
+    <p class="hint">Choose a floor</p>
+  </section>
+
+  <!-- REVEAL + STEP INSIDE -->
+  <section id="gallery" class="scene" aria-label="Gallery">
+    <div class="stage" id="galStage"></div>
+    <div id="floorTag" class="floorTag"></div>
+    <button id="back" class="btn back">↩ Return to Elevator</button>
+    <div id="about" class="about" hidden></div>
+    <div id="archive" class="archive" hidden></div>
+  </section>
+</main>
+
+<!-- Project presentation -->
+<div id="pres" class="overlay" role="dialog" aria-modal="true" aria-labelledby="pTitle" hidden>
+  <button class="btn close" data-close>← Return to Gallery</button>
+  <article class="pbody">
+    <p class="cat" id="pCat"></p><h2 id="pTitle"></h2>
+    <figure class="viewer">
+      <button class="arrow prev" aria-label="Previous image">‹</button>
+      <img id="pImg" alt="" tabindex="0" title="Click to enlarge">
+      <button class="arrow next" aria-label="Next image">›</button>
+      <figcaption><span id="pCap"></span> <span id="pCount"></span></figcaption>
+    </figure>
+    <div id="pThumbs" class="thumbs"></div>
+    <div id="pText" class="text"></div>
+  </article>
+</div>
+
+<!-- Presentation case study (Floor 2) -->
+<div id="cs" class="overlay cs" role="dialog" aria-modal="true" aria-label="Project presentation" hidden></div>
+
+<!-- Generic sheet (All Projects / Contact) -->
+<div id="sheet" class="overlay" role="dialog" aria-modal="true" hidden>
+  <button class="btn close" data-close>✕ Close</button>
+  <div class="pbody" id="sheetBody"></div>
+</div>
+
+<!-- Design Archive viewer: enlarge, zoom, compare -->
+<div id="av" class="overlay av" role="dialog" aria-modal="true" aria-labelledby="avTitle" hidden>
+  <button class="btn close" data-close>← Back to the Archive</button>
+  <div class="av-grid">
+    <div class="av-main">
+      <div id="avTools" class="av-tools"></div>
+      <div id="avView" class="av-view">
+        <img id="avImg" alt="">
+        <div id="avSide" class="av-side" hidden></div>
+      </div>
+      <button class="av-arrow prev" aria-label="Previous image">‹</button>
+      <button class="av-arrow next" aria-label="Next image">›</button>
+      <p id="avCap" class="av-cap"></p>
+      <div id="avThumbs" class="av-thumbs"></div>
+    </div>
+    <aside id="avInfo" class="av-info"></aside>
+  </div>
+</div>
+
+<!-- Lightbox -->
+<div id="lb" class="overlay lb" role="dialog" aria-label="Enlarged image" hidden><img alt=""><button class="btn close" data-close>✕ Close</button></div>
+
+<script src="data/projects.js"></script>
+<script src="data/archive.js"></script>
+<script src="data/case-lwb.js"></script>
+<script src="js/script.js"></script>
+<script src="js/archive.js"></script>
+<script src="js/case.js"></script>
+</body>
+</html>

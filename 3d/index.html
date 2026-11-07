@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>The Impossible Elevator in 3D | Jasmine Mak, Interior Design Portfolio</title>
+<meta name="description" content="Step inside an architectural portfolio: an explorable 3D elevator lobby, elevator and residential design gallery by Jasmine Mak.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/3d.css">
+<!-- Three.js is bundled locally in vendor/, so nothing is loaded from a CDN and it works on GitHub Pages as-is. -->
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js","three/addons/":"./vendor/addons/"}}</script>
+</head>
+<body>
+<div id="live" class="sr" aria-live="polite" role="status"></div>
+<canvas id="gl" aria-label="Interactive 3D architectural environment" tabindex="-1"></canvas>
+
+<!-- 2D alternative + fallback; always reachable -->
+<a class="skip" href="../index.html">Skip the 3D experience: view the 2D portfolio</a>
+
+<div id="intro" class="intro" role="dialog" aria-modal="true" aria-labelledby="introTitle">
+  <div class="intro-card">
+    <p class="kicker">Jasmine Mak · Interior Design Portfolio</p>
+    <h1 id="introTitle">THE IMPOSSIBLE ELEVATOR</h1>
+    <p class="sub">An architectural portfolio you can step inside.</p>
+    <div class="bar" aria-hidden="true"><i id="loadBar"></i></div>
+    <p id="loadMsg" class="msg" role="status">Building the architecture…</p>
+    <button id="enter" class="btn" hidden>ENTER THE LOBBY</button>
+    <p class="alt"><a href="../index.html">View the 2D portfolio instead</a></p>
+  </div>
+</div>
+
+<div id="fallback" class="intro" hidden role="alertdialog" aria-labelledby="fbTitle">
+  <div class="intro-card">
+    <h1 id="fbTitle">3D is not available on this device</h1>
+    <p class="sub">Your browser could not start WebGL. The full portfolio is available in the 2D experience.</p>
+    <p><a class="btn" href="../index.html">OPEN THE 2D PORTFOLIO</a></p>
+  </div>
+</div>
+
+<div id="welcome" class="welcome" aria-hidden="true" hidden>
+  <p class="w1">Jasmine Mak</p><h2 class="w2">The Impossible Elevator</h2><p class="w3">Every floor reveals a different way of thinking.</p>
+</div>
+
+<div id="hud" class="hud" hidden>
+  <header class="top">
+    <a class="chip" href="../index.html" id="to2d">2D portfolio</a>
+    <div class="grp">
+      <button class="chip" id="soundBtn" aria-pressed="true">Sound on</button>
+      <button class="chip" id="skipBtn" aria-pressed="false">Skip animations</button>
+      <button class="chip" id="helpBtn" aria-expanded="false" aria-controls="help">Help</button>
+    </div>
+  </header>
+
+  <div id="place" class="place" aria-live="polite"><span id="placeKicker"></span><b id="placeTitle"></b></div>
+
+  <div id="tip" class="tip" hidden></div>
+  <div id="toast" class="toast" role="status" hidden></div>
+
+  <section id="help" class="help" hidden>
+    <h2>How to move</h2>
+    <ul>
+      <li><b>Guided</b> (default): use <kbd>Next</kbd> and <kbd>Back</kbd> or the arrow keys <kbd>←</kbd> <kbd>→</kbd>. Click a display to look closer.</li>
+      <li><b>Explore</b>: click the floor to walk, or use <kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd>. Drag to look around.</li>
+      <li>Click a project to open its pages. <kbd>Esc</kbd> closes it.</li>
+      <li>In the elevator, click a button or use the floor list.</li>
+    </ul>
+  </section>
+
+  <nav id="floors" class="floors" aria-label="Choose a floor" hidden>
+    <p>Choose a floor</p>
+    <div id="floorList"></div>
+  </nav>
+
+  <footer class="bottom">
+    <div class="seg" role="group" aria-label="Navigation mode">
+      <button id="modeGuided" aria-pressed="true">Guided</button>
+      <button id="modeExplore" aria-pressed="false">Explore</button>
+    </div>
+    <div class="steps" id="steps">
+      <button class="chip" id="prevBtn">‹ Back</button>
+      <span id="stepLabel" class="step-label" aria-live="polite"></span>
+      <button class="chip primary" id="nextBtn">Next ›</button>
+    </div>
+    <div class="acts">
+      <button class="chip" id="openProj" hidden>View project</button>
+      <button class="chip" id="projList" aria-haspopup="dialog">All projects</button>
+      <button class="chip" id="exitCar" hidden>Step out of the elevator</button>
+      <button class="chip" id="toElevator">Enter elevator</button>
+    </div>
+  </footer>
+</div>
+
+<!-- Project presentation: readable HTML panel connected to the 3D display -->
+<div id="proj" class="proj" role="dialog" aria-modal="true" aria-labelledby="projTitle" hidden>
+  <button class="proj-close" id="projClose">← Back to the gallery</button>
+  <div class="proj-grid">
+    <div class="proj-viewer">
+      <div class="proj-stage" id="projStage"><img id="projImg" alt=""></div>
+      <div class="proj-bar">
+        <button class="chip" id="pPrev" aria-label="Previous page">‹</button>
+        <span id="projCap" aria-live="polite"></span>
+        <button class="chip" id="pNext" aria-label="Next page">›</button>
+        <button class="chip" id="pZoom" aria-pressed="false">Enlarge</button>
+      </div>
+      <div class="proj-thumbs" id="projThumbs"></div>
+    </div>
+    <aside class="proj-info">
+      <p class="cat" id="projCat"></p><h2 id="projTitle"></h2><div id="projText"></div>
+      <p><a class="link" href="../index.html">Open the full portfolio in 2D</a></p>
+    </aside>
+  </div>
+</div>
+
+<div id="plist" class="proj" role="dialog" aria-modal="true" aria-label="All projects" hidden>
+  <button class="proj-close" id="plistClose">← Back</button>
+  <div class="plist-wrap"><h2>All projects</h2><p class="note">Residential Design is built in 3D. The other floors are still open in the 2D portfolio.</p><ul id="plistItems"></ul></div>
+</div>
+
+<noscript><div class="intro"><div class="intro-card"><h1>JavaScript is required</h1><p><a class="btn" href="../index.html">OPEN THE 2D PORTFOLIO</a></p></div></div></noscript>
+
+<!-- existing portfolio content, reused as-is -->
+<script>if(location.protocol==="file:"){var m=document.getElementById("loadMsg");if(m)m.innerHTML="The 3D experience can't run from a double-clicked file. Please open it from the live website address (after uploading to GitHub), or use the 2D portfolio below.";}</script>
+<script src="../data/projects.js"></script>
+<script src="../data/case-lwb.js"></script>
+<script src="../data/archive.js"></script>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
